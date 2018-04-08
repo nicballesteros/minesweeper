@@ -15,12 +15,16 @@ function setup() {
             blocks.push(block);
         }
     }
-    
-    for(let i = 0; i < blocks.length; i++){
+
+    for (let i = 0; i < blocks.length; i++) {
         blocks[i].findEightNeighbors();
     }
     chooseMinePos();
     console.log(blocks);
+
+    for (let i = 0; i < blocks.length; i++) {
+        blocks[i].countNeighbors(blocks);
+    }
 }
 
 function draw() {

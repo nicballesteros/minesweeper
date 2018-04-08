@@ -5,6 +5,7 @@ class Block {
         this.isMine = false;
         this.isRevealed = true; //change to false to hide them.
         this.neighbors = [];
+        this.neighborCount = 0;
     }
 
     show() {
@@ -15,6 +16,8 @@ class Block {
             if (this.isMine) {
                 fill(150);
                 ellipse(this.x * screenScale + .5 * screenScale, this.y * screenScale + .5 * screenScale, screenScale / 2, screenScale / 2);
+            } else {
+                text(str, this.x * screenScale + .5 * screenScale, this.y * screenScale + .5 * screenScale);
             }
         }
     }
@@ -56,7 +59,19 @@ class Block {
 
     }
 
-    searchNeighbors() {
-
+    countNeighbors(arr) {
+        //impliment sorting algo
+//        console.log(arr.length)
+        for (let i = 0; i < this.neighbors.length; i++) {
+            for (let j = 0; j < arr.length; j++) {
+                if (arr[j].x === this.neighbors[i].x) {
+                    if (arr[j].y === this.neighbors[i].y) {
+                        if (arr[j].isMine) {
+                            this.neighborCount++;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
