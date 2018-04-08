@@ -3,22 +3,26 @@ class Block {
         this.x = x;
         this.y = y;
         this.isMine = false;
-        this.isRevealed = true; //change to false to hide them.
+        this.isRevealed = false;
         this.neighbors = [];
         this.neighborCount = 0;
+        this.color = 255;
     }
 
     show() {
-        fill(255);
+        fill(this.color);
         rect(this.x * screenScale, this.y * screenScale, screenScale, screenScale);
 
         if (this.isRevealed) {
+            this.color = 200;
+
             if (this.isMine) {
                 fill(150);
                 ellipse(this.x * screenScale + .5 * screenScale, this.y * screenScale + .5 * screenScale, screenScale / 2, screenScale / 2);
             } else {
-                text(('' += this.neighborCount), this.x * screenScale + .5 * screenScale, this.y * screenScale + .5,);
-                text("h");
+                textSize(32);
+                fill(0);
+                text(this.neighborCount, this.x * screenScale + .5 * screenScale - 10, this.y * screenScale + .5 * screenScale + 10);
             }
         }
     }
@@ -61,10 +65,9 @@ class Block {
     }
 
     countNeighbors(arr) {
-        //impliment sorting algo
         //        console.log(arr.length)
-        for (let i = 0; i < this.neighbors.length; i++) {
-            for (let j = 0; j < arr.length; j++) {
+        for (let i = 0; i < this.neighbors.length; i++) { //0-8
+            for (let j = 0; j < arr.length; j++) { //0 - 100
                 if (arr[j].x === this.neighbors[i].x) {
                     if (arr[j].y === this.neighbors[i].y) {
                         if (arr[j].isMine) {
@@ -74,5 +77,17 @@ class Block {
                 }
             }
         }
+    }
+
+    contains(x, y) {
+        if (x > this.x * screenScale && x < this.x * screenScale + screenScale && y > this.y * screenScale && y < this.y * screenScale + screenScale) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    reveal() {
+        this.isRevealed = true;
     }
 }

@@ -25,6 +25,8 @@ function setup() {
     for (let i = 0; i < blocks.length; i++) {
         blocks[i].countNeighbors(blocks);
     }
+    
+    mousePressed();
 }
 
 function draw() {
@@ -58,4 +60,12 @@ function mineCheck() {
     }
 
     return x;
+}
+
+function mousePressed() {
+    for (let i = 0; i < blocks.length; i++) {
+        if (blocks[i].contains(mouseX, mouseY)) {
+            blocks[i].reveal();
+        }
+    }
 }
