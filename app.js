@@ -4,7 +4,7 @@ let canvasSize = {
     x: 601,
     y: 601
 }
-let mineCount = 50;
+let mineCount = 10;
 
 function setup() {
     createCanvas(canvasSize.x, canvasSize.y);
@@ -15,9 +15,11 @@ function setup() {
             blocks.push(block);
         }
     }
-
+    
+    for(let i = 0; i < blocks.length; i++){
+        blocks[i].findEightNeighbors();
+    }
     chooseMinePos();
-
     console.log(blocks);
 }
 
@@ -39,7 +41,6 @@ function chooseMinePos() {
         mines.push(x);
         blocks[x].isAMine();
     }
-    console.log(mines);
 }
 
 //make sure there aren't any repeats
@@ -48,7 +49,7 @@ function mineCheck() {
 
     for (let j = 0; j < mines.length; j++) {
         if (mines[j] === x) {
-            mineCheck();
+            x = mineCheck();
         }
     }
 
