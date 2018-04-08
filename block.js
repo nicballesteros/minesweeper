@@ -17,7 +17,8 @@ class Block {
                 fill(150);
                 ellipse(this.x * screenScale + .5 * screenScale, this.y * screenScale + .5 * screenScale, screenScale / 2, screenScale / 2);
             } else {
-                text(str, this.x * screenScale + .5 * screenScale, this.y * screenScale + .5 * screenScale);
+                text(('' += this.neighborCount), this.x * screenScale + .5 * screenScale, this.y * screenScale + .5,);
+                text("h");
             }
         }
     }
@@ -61,7 +62,7 @@ class Block {
 
     countNeighbors(arr) {
         //impliment sorting algo
-//        console.log(arr.length)
+        //        console.log(arr.length)
         for (let i = 0; i < this.neighbors.length; i++) {
             for (let j = 0; j < arr.length; j++) {
                 if (arr[j].x === this.neighbors[i].x) {
