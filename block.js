@@ -1,39 +1,71 @@
 class Block {
-    constructor(x, y) {
+    constructor(i, j, x, y, w) {
+        this.i = i;
+        this.j = j;
         this.x = x;
         this.y = y;
+        this.w = w
         this.isMine = false;
         this.isRevealed = false;
         this.neighbors = [];
         this.neighborCount = 0;
         this.color = 255;
+        this.empty = false;
+        this.marked = false;
+        this.color2 = this.color;
+        this.color3 = this.color;
     }
 
     show() {
-        fill(this.color);
-        rect(this.x * screenScale, this.y * screenScale, screenScale, screenScale);
+        fill(this.color, this.color2, this.color3);
+        rect(this.x, this.y, this.w, this.w);
+
+        if (this.neighborCount === 0) {
+            this.empty = true;
+        } else {
+            this.empty = false;
+        }
 
         if (this.isRevealed) {
             this.color = 200;
+            this.color2 = 200;
+            this.color3 = 200;
 
             if (this.isMine) {
                 fill(150);
-                ellipse(this.x * screenScale + .5 * screenScale, this.y * screenScale + .5 * screenScale, screenScale / 2, screenScale / 2);
+                ellipse(this.x + .5 * this.w, this.y + .5 * this.w, this.w / 2, this.w / 2);
             } else {
-                textSize(32);
-                fill(0);
-                text(this.neighborCount, this.x * screenScale + .5 * screenScale - 10, this.y * screenScale + .5 * screenScale + 10);
+                if (!this.empty) {
+                    textSize(32);
+                    fill(0);
+                    text(this.neighborCount, this.x + .5 * this.w - 10, this.y + .5 * this.w + 10);
+                }
             }
+        } else if (this.marked) {
+            this.color = 160;
+            this.color2 = 40;
+            this.color3 = 40;
+        } else {
+            this.color = 255;
+            this.color2 = 255;
+            this.color3 = 255;
         }
+
     }
 
+
+
     isAMine() {
-        this.isMine = true;
         //assign block as a mine
+        this.isMine = true;
+    }
+
+    getIsMine() {
+        return this.isMine;
     }
 
     findEightNeighbors() {
-        //        find neighbors
+        //find neighbors
         for (let i = 0; i < 9; i++) {
             let obj = {
                 x: 0,
@@ -48,39 +80,38 @@ class Block {
                 add = 1;
             }
 
-            obj.x = (this.x - 1) + i % 3;
-            obj.y = this.y + add;
+            obj.x = (this.i - 1) + i % 3;
+            obj.y = this.j + add;
 
             this.neighbors.push(obj);
         }
-
         this.neighbors.splice(4, 1);
         for (let i = 0; i < this.neighbors.length; i++) {
-            if (this.neighbors[i].x < 0 || this.neighbors[i].y < 0 || this.neighbors[i].x > (floor(canvasSize.x / screenScale) || this.neighbors[i].y > (floor(canvasSize.y / screenScale)))) {
+            if (this.neighbors[i].x < 0 || this.neighbors[i].y < 0 || this.neighbors[i].x > (floor(canvasSize.x / this.w)) - 1 || this.neighbors[i].y > (floor(canvasSize.y / this.w)) - 1) {
                 this.neighbors.splice(i, 1);
                 i = -1;
             }
         }
+    }
 
+    getEmpty() {
+        return this.empty;
+    }
+
+    getReveal() {
+        return this.isRevealed;
     }
 
     countNeighbors(arr) {
-        //        console.log(arr.length)
         for (let i = 0; i < this.neighbors.length; i++) { //0-8
-            for (let j = 0; j < arr.length; j++) { //0 - 100
-                if (arr[j].x === this.neighbors[i].x) {
-                    if (arr[j].y === this.neighbors[i].y) {
-                        if (arr[j].isMine) {
-                            this.neighborCount++;
-                        }
-                    }
-                }
+            if (arr[this.neighbors[i].y][this.neighbors[i].x].getIsMine()) {
+                this.neighborCount++;
             }
         }
     }
 
     contains(x, y) {
-        if (x > this.x * screenScale && x < this.x * screenScale + screenScale && y > this.y * screenScale && y < this.y * screenScale + screenScale) {
+        if (x > this.x && x < this.x + this.w && y > this.y && y < this.y + this.w) {
             return true;
         } else {
             return false;
@@ -88,6 +119,20 @@ class Block {
     }
 
     reveal() {
-        this.isRevealed = true;
+        if (!this.revealed && !this.marked) {
+            this.isRevealed = true;
+        }
+    }
+
+    getNeighborAddresses() {
+        return this.neighbors;
+    }
+
+    mark() {
+        if (!this.isRevealed && !this.marked) {
+            this.marked = true;
+        } else if (!this.isRevealed && this.marked) {
+            this.marked = false;
+        }
     }
 }
